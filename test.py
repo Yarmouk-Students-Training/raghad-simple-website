@@ -1,9 +1,7 @@
 print("Hello everyone")
 Name = "Raghad"
- 
-const greet = (Name)=> {
-    console.log('Hello' , Name);
-}
+print("I am " , Name)
 
-greet("Ahmad");
-greet("Raghad");
+for i in range(0 , 10):
+    print(4*i)
+    
