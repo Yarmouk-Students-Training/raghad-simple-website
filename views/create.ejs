@@ -20,15 +20,16 @@
         </ul>
         </nav> -->
         <div class="create-blog content">
-            <from>
-                <label fro="title">Blog title:</label>
-                <input type="text" id="title" required>
+            <form action="/blogs" method="POST">
+                <label for="title">Blog title:</label>
+                <input type="text" id="title" name="title" required>
                 <label for="snippet">Blog snippet:</label>
-                <input type="text" id="snippet" required>
+                <input type="text" id="snippet" name="snippet" required>
                 <label for="body">Blog body</label>
-                <textarea id="body" required></textarea>
+                <textarea id="body" required name="body" ></textarea>
                 <button>Submit</button>
-            </from>
+            </form>
+            
         </div>
         <%- include('./partials/footer.ejs') %>
     </body>
