@@ -7,7 +7,7 @@ const blogSchema = new Schema({
         require:true},
     snippet: {
         type:String,
-        require:true
+        require:true,
     },
     body: {
         type:String,
