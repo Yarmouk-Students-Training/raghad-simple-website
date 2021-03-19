@@ -53,6 +53,8 @@
        .content{margin-left: 20px;}
 
        /*index styles*/
+       .what h1,p{color:rgb(121, 27, 43);}
+       /*index styles*/
        .blogs a{
            display: block;
            margin:40px 0 ;

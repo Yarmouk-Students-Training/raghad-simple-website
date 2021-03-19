@@ -23,8 +23,13 @@ app.use(morgan('dev'));
 //routes
 app.get('/', (req , res)=>{
     res.redirect('/blogs');});
+    
 app.get('/about', (req,res)=>{
     res.render('about', {title: 'About'} );
+});
+
+app.get('/what', (req,res)=>{
+    res.render('what', {title: 'what to do'} );
 });
 
 // blog routes
