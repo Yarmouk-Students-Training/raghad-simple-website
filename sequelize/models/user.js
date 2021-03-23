@@ -13,19 +13,19 @@ module.exports = (sequelize, DataTypes) => {
       static associate({friend:friend,post:post,comment:comment,react:react}) {
         // define association here
         this.hasMany(friend,{foreignKey:'userID'});
-        this.hasMany(Post,{foreignKey:'userID'});
-        this.hasMany(Comment,{foreignKey:'userID'});
-        this.hasMany(React,{foreignKey:'userID'});
+        this.hasMany(post,{foreignKey:'userID'});
+        this.hasMany(comment,{foreignKey:'userID'});
+        this.hasMany(react,{foreignKey:'userID'});
         
       }
     }
   };
 
   user.init({
-    userID: {DataTypes:INTEGER,primaryKey:true,allowNull:false,validate:{allowNull:'must have a user id'}},
-    name: {DataTypes:STRING,allowNull:false,validate:{allowNull:'must have a user name'}},
-    email: {DataTypes:STRING,primaryKey:true,allowNull:false,validate:{allowNull:'must have a user email'}},
-    password: {DataTypes:STRING,allowNull:false,validate:{allowNull:'must have a user password'}},
+    userID: {type:DataTypes.INTEGER,primaryKey:true,allowNull:false,validate:{allowNull:'must have a user id'}},
+    name: {type:DataTypes.STRING,allowNull:false,validate:{allowNull:'must have a user name'}},
+    email: {type:DataTypes.STRING,primaryKey:true,allowNull:false,validate:{allowNull:'must have a user email'}},
+    password: {type:DataTypes.STRING,allowNull:false,validate:{allowNull:'must have a user password'}},
   }, {
     sequelize,
     tableName:'user',

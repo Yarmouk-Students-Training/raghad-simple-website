@@ -1,38 +1,38 @@
 'use strict';
 module.exports = {
-  up: async (queryInterface, DataType) => {
+  up: async (queryInterface, DataTypes) => {
     await queryInterface.createTable('friends', {
      
       friendID: {
-        type: Sequelize.INET,
+        type: DataTypes.INET,
         allowNull: false,
         primaryKey: true,
       },
       userID: {
         allowNull: false,
         forignKey: true,
-        type: DataType.INTEGER
+        type: DataTypes.INTEGER
       },
       accept: {
-        type: DataType.BOOLEAN
+        type: DataTypes.BOOLEAN
       },
       reject: {
-        type: DataType.BOOLEAN
+        type: DataTypes.BOOLEAN
       },
       block: {
-        type: DataType.BOOLEAN
+        type: DataTypes.BOOLEAN
       },
       createdAt: {
         allowNull: false,
-        type: DataType.DATE
+        type: DataTypes.DATE
       },
       updatedAt: {
         allowNull: false,
-        type: DataType.DATE
+        type: DataTypes.DATE
       }
     });
   },
-  down: async (queryInterface, DataType) => {
+  down: async (queryInterface, DataTypes) => {
     await queryInterface.dropTable('friends');
   }
 };

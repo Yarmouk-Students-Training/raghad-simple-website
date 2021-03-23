@@ -18,10 +18,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   react.init({
-    reactID: {DataTypes:INTEGER,primaryKey:true,allowNull:false,validate:{allowNull:'must have a react id'}},
-    postID: {DataTypes:INTEGER,forignyKey:true,allowNull:false,validate:{allowNull:'must have a post id'}},
-    userID: {DataTypes:INTEGER,forignyKey:true,allowNull:false,validate:{allowNull:'must have a user id'}},
-    type: {DataTypes:STRING,allowNull:false,},
+    reactID: {type:DataTypes.INTEGER,primaryKey:true,allowNull:false,validate:{allowNull:'must have a react id'}},
+    postID: {type:DataTypes.INTEGER,forignyKey:true,allowNull:false,validate:{allowNull:'must have a post id'}},
+    userID: {type:DataTypes.INTEGER,forignyKey:true,allowNull:false,validate:{allowNull:'must have a user id'}},
+    type: {type:DataTypes.STRING,allowNull:false,},
   }, {
     sequelize,
     tableName:'react',

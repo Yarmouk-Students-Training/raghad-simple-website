@@ -1,39 +1,45 @@
 'use strict';
+
+const { DataTypes } = require("sequelize/types");
+
 module.exports = {
-  up: async (queryInterface, Sequelize) => {
+  up: async (queryInterface, DataTypes) => {
     await queryInterface.createTable('comments', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
-      },
+     
       commentID: {
-        type: Sequelize.INET
+        allowNull: false,
+        primaryKey: true,
+        type: DataTypes.INTEGER
       },
       postID: {
-        type: Sequelize.INET
+        allowNull: false,
+        forignKey: true,
+        type: DataTypes.INTEGER
       },
       userID: {
-        type: Sequelize.INET
+        allowNull: false,
+        forignKey: true,
+        type: DataTypes.INTEGER
       },
       name: {
-        type: Sequelize.STRING
+        allowNull: false,
+        type: DataTypes.STRING
       },
       content: {
-        type: Sequelize.STRING
+        allowNull: false,
+        type: DataTypes.STRING
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: DataTypes.DATE
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: DataTypes.DATE
       }
     });
   },
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface, DataTypes) => {
     await queryInterface.dropTable('comments');
   }
 };

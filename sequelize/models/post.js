@@ -12,15 +12,15 @@ module.exports = (sequelize, DataTypes) => {
     static associate({user:user,comment:comment,react:react}) {
       // define association here
       this.belongsTo(user,{foreignKey:'userID'});
-      this.hasMany(Comment,{foreignKey:'postID'});
-      this.hasMany(React,{foreignKey:'postID'});
+      this.hasMany(comment,{foreignKey:'postID'});
+      this.hasMany(react,{foreignKey:'postID'});
     }
   };
   post.init({
-    postID: {DataTypes:INTEGER,primaryKey:true,allowNull:false,validate:{allowNull:'must have a post id'}},
-    userID: {DataTypes:INTEGER,forignKey:true,allowNull:false,validate:{allowNull:'must have a user id'}},
-    public_date:{DataTypes:DATE,allowNull:false,validate:{allowNull:'must have a public date'}},
-    content: {DataTypes:STRING,allowNull:false,validate:{allowNull:'must have a content'}},
+    postID: {type:DataTypes.INTEGER,primaryKey:true,allowNull:false,validate:{allowNull:'must have a post id'}},
+    userID: {type:DataTypes.INTEGER,forignKey:true,allowNull:false,validate:{allowNull:'must have a user id'}},
+    public_date:{type:DataTypes.DATE,allowNull:false,validate:{allowNull:'must have a public date'}},
+    content: {type:DataTypes.STRING,allowNull:false,validate:{allowNull:'must have a content'}},
     comment: DataTypes.STRING,
     react: DataTypes.STRING
   }, {

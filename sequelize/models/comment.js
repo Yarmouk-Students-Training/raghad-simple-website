@@ -16,11 +16,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   comment.init({
-    commentID: {DataTypes:INTEGER,primaryKey:true,allowNull:false,validate:{allowNull:'must have a comment id'}},
-    postID: {DataTypes:INTEGER,foringyKey:true,allowNull:false,validate:{allowNull:'must have a post id'}},
-    userID: {DataTypes:INTEGER,foringyKey:true,allowNull:false,validate:{allowNull:'must have a user id'}},
-    name: {DataTypes:STRING,allowNull:false,validate:{allowNull:'must have a user id'}},
-    content: {DataTypes:STRING,allowNull:false,validate:{allowNull:'must have a user id'}},
+    commentID: {type:DataTypes.INTEGER,primaryKey:true,allowNull:false,validate:{allowNull:'must have a comment id'}},
+    postID: {type:DataTypes.INTEGER,foringyKey:true,allowNull:false,validate:{allowNull:'must have a post id'}},
+    userID: {type:DataTypes.INTEGER,foringyKey:true,allowNull:false,validate:{allowNull:'must have a user id'}},
+    name: {type:DataTypes.STRING,allowNull:false,validate:{allowNull:'must have a user id'}},
+    content: {type:DataTypes.STRING,allowNull:false,validate:{allowNull:'must have a user id'}},
   }, {
     sequelize,
     tableName:'comment',

@@ -1,45 +1,45 @@
 'use strict';
 module.exports = {
-  up: async (queryInterface, DataType) => {
+  up: async (queryInterface, DataTypes) => {
     await queryInterface.createTable('posts', {
       
       postID: {
         allowNull: false,
         primaryKey: true,
-        type: DataType.INTEGER
+        type: DataTypes.INTEGER
       },
       userID: {
         allowNull: false,
         forignyKey: true,
-        type: DataType.INTEGER
+        type: DataTypes.INTEGER
       },
       public_date: {
         allowNull: false,
-        type: DataType.DATE
+        type: DataTypes.DATE
       },
       content: {
         allowNull: false,
-        type: DataType.STRING
+        type: DataTypes.STRING
       },
       comment: {
         allowNull: false,
-        type: DataType.STRING
+        type: DataTypes.STRING
       },
       react: {
         allowNull: false,
-        type: DataType.STRING
+        type: DataTypes.STRING
       },
       createdAt: {
         allowNull: false,
-        type: DataType.DATE
+        type: DataTypes.DATE
       },
       updatedAt: {
         allowNull: false,
-        type: DataType.DATE
+        type: DataTypes.DATE
       }
     });
   },
-  down: async (queryInterface, DataType) => {
+  down: async (queryInterface, DataTypes) => {
     await queryInterface.dropTable('posts');
   }
 };

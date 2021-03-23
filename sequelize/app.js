@@ -2,7 +2,7 @@ const express = require('express')
 const { sequelize } = require('./models')
 const app = express()
 
-app.use(express.json())
+//app.use(express.json())
 // app.post('/user', async (req, res) => {
 //     const {userID,name,email,password  } = req.body
   

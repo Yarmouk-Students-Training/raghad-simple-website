@@ -16,8 +16,8 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   friend.init({
-    friendID: {DataTypes:INTEGER,primaryKey:true,allowNull:false,validate:{allowNull:'must have a friend id'}},
-    userID: {DataTypes:INTEGER,forignKey:true,allowNull:false,validate:{allowNull:'must have a user id'}},
+    friendID: {type:DataTypes.INTEGER,primaryKey:true,allowNull:false,validate:{allowNull:'must have a friend id'}},
+    userID: {type:DataTypes.INTEGER,forignKey:true,allowNull:false,validate:{allowNull:'must have a user id'}},
     accept: DataTypes.BOOLEAN,
     reject: DataTypes.BOOLEAN,
     block: DataTypes.BOOLEAN
