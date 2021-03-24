@@ -4,7 +4,7 @@ const app = express()
 
 app.use(express.json())
 
-app.post('/user', async (req, res) => {  
+app.post('/user/:id', async (req, res) => {  
     const {userID,name,email,password} = req.body
     try {
       const user = await User.create({userID,name,email,password  })
@@ -15,7 +15,7 @@ app.post('/user', async (req, res) => {
       return res.status(500).json(err)
     }   
 })
-app.post('/post', async (req, res) => {
+app.post('/user/post/:id', async (req, res) => {
     const {postID, userID,content,public_date,comment,react } = req.body
     try {
       const user = await user.findOne({userID})
@@ -27,7 +27,7 @@ app.post('/post', async (req, res) => {
       return res.status(500).json(err)
     }
 })
-app.post('/comment', async (req, res) => {
+app.post('/post/comment/:id', async (req, res) => {
     const {userID,commentID , name,content } = req.body
     try {
         const user = await user.findOne({userID})
@@ -39,7 +39,7 @@ app.post('/comment', async (req, res) => {
       return res.status(500).json(err)
     }
 })
-app.post('/react', async (req, res) => {
+app.post('/post/react/:id', async (req, res) => {
     const {userID,reactID ,type } = req.body
     try {
       const user = await user.findOne({userID})
@@ -51,7 +51,7 @@ app.post('/react', async (req, res) => {
       return res.status(500).json(err)
     }
 })
-app.post('/friend', async (req, res) => {
+app.post('/user/friend/:id', async (req, res) => {
     const {userID, friendID,action } = req.body
     try {
       const user = await user.findOne({userID})
@@ -63,70 +63,59 @@ app.post('/friend', async (req, res) => {
       return res.status(500).json(err)
     }
   })
+  app.get('/user/:id', async (req, res) => {
+    try {
+      const user = await user.findOne({userID})
+      return res.json(user)
+    } catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Something went wrong' })
+    }
+  })
 
-//   app.get('/user', async (req, res) => {
-//     try {
-//       const user = await user.findAll()
+    app.get('/user/post/:id', async (req, res) => {
+      try {
+        const post = await post.findAll({userID})
+        return res.json(post)
+          } 
+      catch (err) {
+        console.log(err)
+        return res.status(500).json({ error: 'Something went wrong' })
+         }
+    })
+
+    app.get('/user/post/comment/:id', async (req, res) => {
+      try {
+        const comment = await comment.findAll({postID})
+        return res.json(comment)
+        }
+        catch (err) {
+        console.log(err)
+        return res.status(500).json({ error: 'Something went wrong' })
+        }
+    })
+    app.get('/user/post/react/:id', async (req, res) => {
+      try {
+        const react = await react.findAll({postID})
+        return res.json(react)
+      } 
+      catch (err) {
+        console.log(err)
+        return res.status(500).json({ error: 'Something went wrong' })
+      }
+    })
   
-//       return res.json(user)
-//     } catch (err) {
-//       console.log(err)
-//       return res.status(500).json({ error: 'Something went wrong' })
-//     }
-//   })
-
-
-
-//   app.get('/friend', async (req, res) => {
-//     try {
-//       const friend = await friend.findAll()
-  
-//       return res.json(friend)
-//     } catch (err) {
-//       console.log(err)
-//       return res.status(500).json({ error: 'Something went wrong' })
-//     }
-//   })
+  app.get('/user/friend/:id', async (req, res) => {
+    try {
+      const friend = await friend.findAll({userID})
+      return res.json(friend)
+    } 
+    catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Something went wrong' })
+    }
+  })
  
-
-
-//   app.get('/post', async (req, res) => {
-//     try {
-//       const post = await post.findAll()
-  
-//       return res.json(post)
-//     } catch (err) {
-//       console.log(err)
-//       return res.status(500).json({ error: 'Something went wrong' })
-//     }
-//   })
-
-
-//   app.get('/comment', async (req, res) => {
-//     try {
-//       const comment = await comment.findAll()
-  
-//       return res.json(comment)
-//     } catch (err) {
-//       console.log(err)
-//       return res.status(500).json({ error: 'Something went wrong' })
-//     }
-//   })
-
-
-//   app.get('/react', async (req, res) => {
-//     try {
-//       const react = await react.findAll()
-  
-//       return res.json(react)
-//     } catch (err) {
-//       console.log(err)
-//       return res.status(500).json({ error: 'Something went wrong' })
-//     }
-//   })
-
-
-
 app.listen({ port:3000 }, async () => {
     console.log('Server up on http://localhost:3000')
     //await sequelize.sync({ force:true })
