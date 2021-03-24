@@ -13,7 +13,7 @@ const app = express()
 //     } catch (err) {
 //       console.log(err)
 //       return res.status(500).json(err)
-//     }
+//     }   
 //   })
 //   app.get('/user', async (req, res) => {
 //     try {

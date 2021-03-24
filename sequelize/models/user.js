@@ -10,11 +10,12 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
    
-      static associate({friend,post,comment,react}) {
+      static associate({friend,post,comment,react,group}) {
         // define association here
         this.hasMany(post,{foreignKey:'userID'});
         this.hasMany(comment,{foreignKey:'userID'});
         this.hasMany(react,{foreignKey:'userID'});
+        this.belongsToMany(group,{through:"userGroup"});
         
       }
     }
