@@ -3,7 +3,7 @@ const { sequelize , user , post , comment , react ,friend } = require('./models'
 const app = express()
 
 app.use(express.json())
-
+// POST 
 app.post('/user/:id', async (req, res) => {  
     const {userID,name,email,password} = req.body
     try {
@@ -63,6 +63,7 @@ app.post('/user/friend/:id', async (req, res) => {
       return res.status(500).json(err)
     }
   })
+  // GET
   app.get('/user/:id', async (req, res) => {
     try {
       const user = await user.findOne({userID})
@@ -115,7 +116,138 @@ app.post('/user/friend/:id', async (req, res) => {
       return res.status(500).json({ error: 'Something went wrong' })
     }
   })
+  // PUT
+  app.put('/user/:id', async(req,res)=>{
+    const {userID,name,email,password} = req.body
+    try {
+      const user = await user.findOne({userID})
+      user.name = name
+      user.email=email
+      user.password=password
+      await user.save()
+      return res.json(user)
+    } 
+    catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Something went wrong' })
+    }
+  })
  
+  app.put('/user/post/:id', async(req,res)=>{
+    const {userID,postID,content,public_date} = req.body
+    try {
+      const post = await post.findOne({postID})
+      post.content = content
+      await post.save()
+      return res.json(post)
+    } 
+    catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Something went wrong' })
+    }
+  })
+  app.put('/user/post/comment/:id', async(req,res)=>{
+    const {userID,postID,commentID,content} = req.body
+    try {
+      const comment = await comment.findOne({commentID})
+      comment.content = content
+      await user.save()
+      return res.json(comment)
+    } 
+    catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Something went wrong' })
+    }
+  })
+
+  app.put('/user/post/react/:id', async(req,res)=>{
+    const {userID,postID,reactID,type} = req.body
+    try {
+      const user = await user.findOne({reactID})
+      react.type = type
+      await user.save()
+      return res.json(react)
+    } 
+    catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Something went wrong' })
+    }
+  })
+
+  app.put('/user/friend/:id', async(req,res)=>{
+    const {userID,friendID,action} = req.body
+    try {
+      const friend = await friend.findOne({friendID})
+      friend.action = action
+      await user.save()
+      return res.json(friend)
+    } 
+    catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Something went wrong' })
+    }
+  })
+  // DELETE 
+  app.delete('/user/:id', async(req,res)=>{
+    const {userID,name,email,password} = req.body
+    try {
+      const user = await user.findOne({userID})
+      await user.destroy()
+      return res.json({message:'user deleted'})
+    } 
+    catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Something went wrong' })
+    }
+  })
+  app.delete('/user/post/:id', async(req,res)=>{
+    const {userID,postID,content,public_date} = req.body
+    try {
+      const post = await post.findOne({postID})
+      await post.destroy()
+      return res.json({message:'post deleted'})
+    } 
+    catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Something went wrong' })
+    }
+  })
+  app.delete('/user/post/comment/:id', async(req,res)=>{
+    const {userID,postID,commentID,content} = req.body
+    try {
+      const comment = await comment.findOne({commentID})
+      await comment.destroy()
+      return res.json({message:'comment deleted'})
+    } 
+    catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Something went wrong' })
+    }
+  })
+  app.delete('/user/post/react/:id', async(req,res)=>{
+    const {userID,postID,reactID,type} = req.body
+    try {
+      const react = await react.findOne({reactID})
+      await react.destroy()
+      return res.json({message:'react deleted'})
+    } 
+    catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Something went wrong' })
+    }
+  })
+  app.delete('/user/friend/:id', async(req,res)=>{
+    const {userID,friendID} = req.body
+    try {
+      const friend = await friend.findOne({friendID})
+      await friend.destroy()
+      return res.json({message:'friend deleted'})
+    } 
+    catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Something went wrong' })
+    }
+  })
 app.listen({ port:3000 }, async () => {
     console.log('Server up on http://localhost:3000')
     //await sequelize.sync({ force:true })
