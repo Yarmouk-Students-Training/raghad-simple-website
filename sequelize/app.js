@@ -1,20 +1,69 @@
 const express = require('express')
-const { sequelize } = require('./models')
+const { sequelize , user , post , comment , react ,friend } = require('./models')
 const app = express()
 
-//app.use(express.json())
-// app.post('/user', async (req, res) => {
-//     const {userID,name,email,password  } = req.body
-  
-//     try {
-//       const user = await User.create({userID,name,email,password  })
-  
-//       return res.json(user)
-//     } catch (err) {
-//       console.log(err)
-//       return res.status(500).json(err)
-//     }   
-//   })
+app.use(express.json())
+
+app.post('/user', async (req, res) => {  
+    const {userID,name,email,password} = req.body
+    try {
+      const user = await User.create({userID,name,email,password  })
+      return res.json(user)
+      
+    } catch (err) {
+      console.log(err)
+      return res.status(500).json(err)
+    }   
+})
+app.post('/post', async (req, res) => {
+    const {postID, userID,content,public_date,comment,react } = req.body
+    try {
+      const user = await user.findOne({userID})
+      const post = await post.create({postID, userID,content,public_date,comment,react})
+      return res.json(post)
+        } 
+    catch (err) {
+      console.log(err)
+      return res.status(500).json(err)
+    }
+})
+app.post('/comment', async (req, res) => {
+    const {userID,commentID , name,content } = req.body
+    try {
+        const user = await user.findOne({userID})
+        const comment = await User.create({userID,commentID ,name,content})
+      return res.json(comment)
+        } 
+    catch (err) {
+      console.log(err)
+      return res.status(500).json(err)
+    }
+})
+app.post('/react', async (req, res) => {
+    const {userID,reactID ,type } = req.body
+    try {
+      const user = await user.findOne({userID})
+      const react = await User.create({userID,reactID ,type})
+      return res.json(react)
+        } 
+    catch (err) {
+      console.log(err)
+      return res.status(500).json(err)
+    }
+})
+app.post('/friend', async (req, res) => {
+    const {userID, friendID,action } = req.body
+    try {
+      const user = await user.findOne({userID})
+      const friend = await User.create({user1: userID, user2: friendID,action})
+      return res.json(friend)
+        } 
+    catch (err) {
+      console.log(err)
+      return res.status(500).json(err)
+    }
+  })
+
 //   app.get('/user', async (req, res) => {
 //     try {
 //       const user = await user.findAll()
@@ -26,18 +75,7 @@ const app = express()
 //     }
 //   })
 
-//   app.post('/friend', async (req, res) => {
-//     const {friendID, userID,accept,reject,block } = req.body
-  
-//     try {
-//       const friend = await User.create({friendID, userID,accept,reject,block  })
-  
-//       return res.json(friend)
-//     } catch (err) {
-//       console.log(err)
-//       return res.status(500).json(err)
-//     }
-//   })
+
 
 //   app.get('/friend', async (req, res) => {
 //     try {
@@ -50,18 +88,7 @@ const app = express()
 //     }
 //   })
  
-//   app.post('/post', async (req, res) => {
-//     const {postID, userID,content,public_date,comment,react } = req.body
-  
-//     try {
-//       const post = await User.create({postID, userID,content,public_date,comment,react})
-  
-//       return res.json(post)
-//     } catch (err) {
-//       console.log(err)
-//       return res.status(500).json(err)
-//     }
-//   })
+
 
 //   app.get('/post', async (req, res) => {
 //     try {
@@ -73,18 +100,7 @@ const app = express()
 //       return res.status(500).json({ error: 'Something went wrong' })
 //     }
 //   })
-//   app.post('/comment', async (req, res) => {
-//     const {commentID , postID, userID,name,content } = req.body
-  
-//     try {
-//       const comment = await User.create({commentID , postID, userID,name,content})
 
-//       return res.json(comment)
-//     } catch (err) {
-//       console.log(err)
-//       return res.status(500).json(err)
-//     }
-//   })
 
 //   app.get('/comment', async (req, res) => {
 //     try {
@@ -96,18 +112,7 @@ const app = express()
 //       return res.status(500).json({ error: 'Something went wrong' })
 //     }
 //   })
-//   app.post('/react', async (req, res) => {
-//     const {commentID , postID, userID,name,content } = req.body
-  
-//     try {
-//       const react = await User.create({reactID , postID, userID,type})
-      
-//       return res.json(react)
-//     } catch (err) {
-//       console.log(err)
-//       return res.status(500).json(err)
-//     }
-//   })
+
 
 //   app.get('/react', async (req, res) => {
 //     try {

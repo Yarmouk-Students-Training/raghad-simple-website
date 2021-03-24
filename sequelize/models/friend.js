@@ -1,6 +1,6 @@
 'use strict';
 const {
-  Model, INTEGER
+  Model, INTEGER, ENUM
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class friend extends Model {
@@ -11,17 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate({user,group}) {
       // define association here
-      this.belongsTo(user,{foreignKey:'userID'});
-      this.belongsToMany(group,{through:"userGroup"});
-
 
     }
   };
+  
   friend.init({
-    friendID: {type:DataTypes.INTEGER,primaryKey:true,allowNull:false,validate:{allowNull:'must have a friend id'}},
-    accept: DataTypes.BOOLEAN,
-    reject: DataTypes.BOOLEAN,
-    block: DataTypes.BOOLEAN
+    action:DataTypes.ENUM('accept', 'reject' ,'Block')
   }, {
     sequelize,
     tableName:'friend',
