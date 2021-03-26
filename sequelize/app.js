@@ -1,6 +1,7 @@
 const express = require('express');
 const  user  = require('./models/user');
 const { Sequelize } = require('sequelize');
+const { models } = require('mongoose');
  //register app
  const app = express();
 
@@ -19,63 +20,63 @@ const { Sequelize } = require('sequelize');
  app.use(express.json());
  
 /////// for user /////
-// app.get('/user/:id', async (req, res) => {
-//   const id = req.params.id;
-//     try {
-//       const post = await post.findAll({id})
-//       return res.json(post)
-//         } 
-//       catch (err) {
-//       console.log(err)
-//       return res.status(500).json({ error: 'Something went wrong' })
-//         }
-// })
+app.get('/user/:id', async (req, res) => {
+  const id = req.params.id;
+    try {
+      const user = await models.user.findAll();
+      return res.json(post)
+        } 
+      catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Something went wrong' })
+        }
+})
 
-// app.post('/user/create', async (req, res s) => {  
-//     const {userID,name,email,password} = req.body
-//     try {
-//       const user = await user.create({userID,name,email,password  })
-//       return res.json(user)
-//     } catch (err) {
-//       console.log(err)
-//       return res.status(500).json(err)
-//     }   
-// })
+app.post('/user/create', async (req, res ) => {  
+    const {userID,name,email,password} = req.body
+    try {
+      const user = await models.user.create({userID,name,email,password  })
+      return res.json(user)
+    } catch (err) {
+      console.log(err)
+      return res.status(500).json(err)
+    }   
+})
 
-//   app.put('/user/:id', async(req,res)=>{
-//     const {userID,name,email,password} = req.body
-//     try {
-//       const user = await user.findOne({userID})
-//       user.name = name
-//       user.email=email
-//       user.password=password
-//       await user.save()
-//       return res.json(user)
-//     } 
-//     catch (err) {
-//       console.log(err)
-//       return res.status(500).json({ error: 'Something went wrong' })
-//     }
-//   })
+  app.put('/user/:id', async(req,res)=>{
+    const {userID,name,email,password} = req.body
+    try {
+      const user = await user.findOne({where:{userID}})
+      user.name = name
+      user.email=email
+      user.password=password
+      await user.save()
+      return res.json(user)
+    } 
+    catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Something went wrong' })
+    }
+  })
 
-//   app.delete('/user/:id', async(req,res)=>{
-//     const {userID,name,email,password} = req.body
-//     try {
-//       const user = await user.findOne({userID})
-//       await user.destroy()
-//       return res.json({message:'user deleted'})
-//     } 
-//     catch (err) {
-//       console.log(err)
-//       return res.status(500).json({ error: 'Something went wrong' })
-//     }
-//   })
+  app.delete('/user/:id', async(req,res)=>{
+      const id = req.params.userID;
+    try {
+      const user = await models.user.findOne({where:{userID}})
+      await user.destroy()
+      return res.json({message:'user deleted'})
+    } 
+    catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Something went wrong' })
+    }
+  })
 
 ////// for post ////
 //     app.get('/user/post/:id', async (req, res) => {
 //     const id = req.params.id;
 //       try {
-//         const post = await post.findAll({id})
+//         const post = await models.post.findAll({id})
 //         return res.json(post)
 //           } 
 //       catch (err) {
