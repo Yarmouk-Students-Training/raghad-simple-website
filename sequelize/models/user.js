@@ -23,25 +23,26 @@ module.exports = (sequelize, DataTypes) => {
   user.init({
     userID: {
       type: DataTypes.INTEGER,
+      autoIncrement:true,
       primaryKey: true,
       allowNull: false,
-      validate: { allowNull: 'must have a user id' }
+
     },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: { allowNull: 'must have a user name' }
+    
     },
     email: {
       type: DataTypes.STRING,
       unique: true,
       allowNull: false,
-      validate: { allowNull: 'must have a user email' }
+    
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: { allowNull: 'must have a user password' }
+
     },
   }, {
     sequelize,

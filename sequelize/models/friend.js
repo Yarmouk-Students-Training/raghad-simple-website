@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   };
   
   friend.init({
-    action:DataTypes.ENUM('accept', 'reject' ,'Block')
+    action:DataTypes.ENUM('accept', 'reject' )
   }, {
     sequelize,
     tableName:'friend',

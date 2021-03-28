@@ -14,8 +14,8 @@ module.exports = {
         type: DataTypes.INTEGER
       },
       public_date: {
-        allowNull: false,
-        type: DataTypes.DATE
+        allowNull: true,
+        type: Sequelize.DATE,
       },
       content: {
         allowNull: false,

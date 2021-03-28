@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   react.init({
-    reactID: {type:DataTypes.INTEGER,primaryKey:true,allowNull:false,validate:{allowNull:'must have a react id'}},
+    reactID: {type:DataTypes.INTEGER,primaryKey:true,allowNull:false,autoIncrement:true},
     type: {type: DataTypes.STRING,allowNull:false,},
   }, {
     sequelize,

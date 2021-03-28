@@ -16,9 +16,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   comment.init({
-    commentID: {type:DataTypes.INTEGER,primaryKey:true,allowNull:false,validate:{allowNull:'must have a comment id'}},
-    name: {type:DataTypes.STRING,allowNull:false,validate:{allowNull:'must have a user id'}},
-    content: {type:DataTypes.STRING,allowNull:false,validate:{allowNull:'must have a user id'}},
+    commentID: {type:DataTypes.INTEGER,primaryKey:true,allowNull:false,autoIncrement:true},
+    postID:{type:DataTypes.INTEGER,foreignKey:true},
+    name: {type:DataTypes.STRING,allowNull:false},
+    content: {type:DataTypes.STRING,allowNull:false},
   }, {
     sequelize,
     tableName:'comment',

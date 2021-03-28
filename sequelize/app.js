@@ -1,7 +1,7 @@
 const express = require('express');
-const  user  = require('./models/user');
+const { sequelize, user, post , comment , react , friend} = require('./models')
 const { Sequelize } = require('sequelize');
-const { models } = require('mongoose');
+
  //register app
  const app = express();
 
@@ -16,15 +16,32 @@ const { models } = require('mongoose');
  dbconnect.authenticate()
     .then(() => console.log('db connected seccusfully'))
     .catch(err => console.log('db error: ' + err))
-
+    /// tables syncing ..
+   user.sync({force : false}).then(() => {
+      console.log('user table synced');
+      
+     });
  app.use(express.json());
- 
-/////// for user /////
-app.get('/user/:id', async (req, res) => {
-  const id = req.params.id;
+
+ /////// for user /////
+ // create user
+ app.post('/users', async (req, res) => {
+  const { name , password , email } = req.body
+  const id = req.params.id
+  try {
+      const User = await user.create({ name, password, email } )
+      return res.json(User)
+
+  }   catch (err) {
+      console.log(err)
+      return res.status(500).json(err)
+    }
+})
+app.get('/user', async (req, res) => {
+  const {userID} = req.body;
     try {
-      const user = await models.user.findAll();
-      return res.json(post)
+      const User = await user.findOne({ where:  {userID}  })
+      return res.json(User)
         } 
       catch (err) {
       console.log(err)
@@ -32,26 +49,17 @@ app.get('/user/:id', async (req, res) => {
         }
 })
 
-app.post('/user/create', async (req, res ) => {  
+  app.put('/user', async(req,res)=>{
     const {userID,name,email,password} = req.body
-    try {
-      const user = await models.user.create({userID,name,email,password  })
-      return res.json(user)
-    } catch (err) {
-      console.log(err)
-      return res.status(500).json(err)
-    }   
-})
+    const id = req.params.id
 
-  app.put('/user/:id', async(req,res)=>{
-    const {userID,name,email,password} = req.body
     try {
-      const user = await models.user.findOne({where:{userID}})
-      user.name = name
-      user.email=email
-      user.password=password
-      await user.save()
-      return res.json(user)
+      const User = await user.findOne({where:{userID}})
+      User.name = name
+      User.email=email
+      User.password=password
+      await User.save()
+      return res.json(User)
     } 
     catch (err) {
       console.log(err)
@@ -59,11 +67,12 @@ app.post('/user/create', async (req, res ) => {
     }
   })
 
-  app.delete('/user/:id', async(req,res)=>{
-      const id = req.params.userID;
+  app.delete('/user', async(req,res)=>{
+      //const id = req.params.id;
+      const {userID} = req.body;
     try {
-      const user = await models.user.findOne({where:{userID}})
-      await user.destroy()
+      const User = await user.findOne({where:{userID}})
+      await User.destroy()
       return res.json({message:'user deleted'})
     } 
     catch (err) {
@@ -72,62 +81,67 @@ app.post('/user/create', async (req, res ) => {
     }
   })
 
-//// for post ////
-    app.get('/user/post/:id', async (req, res) => {
+// //// for post ////
+  app.get('/user/post', async (req, res) => {
     const id = req.params.id;
+    const {postID} = req.body;
       try {
-        const post = await models.post.findAll({id})
-        return res.json(post)
+        const Post = await post.findAll({where : {postID}})
+        return res.json(Post)
           } 
       catch (err) {
         console.log(err)
         return res.status(500).json({ error: 'Something went wrong' })
          }
     })
-
-app.post('/user/post/:id', async (req, res) => {
-    const {postID, userID,content,public_date,comment,react } = req.body
-    try {
-      const post = await models.post.create({postID, userID,content,public_date,comment,react})
-      return res.json(post)
-        } 
-    catch (err) {
-      console.log(err)
-      return res.status(500).json(err)
-    }
-})
-  app.put('/user/post/:id', async(req,res)=>{
-    const {userID,postID,content,public_date} = req.body
-    try {
-      const post = await models.post.findOne({postID})
-      post.content = content
-      await post.save()
-      return res.json(post)
-    } 
-    catch (err) {
-      console.log(err)
-      return res.status(500).json({ error: 'Something went wrong' })
-    }
-  })
-  app.delete('/user/post/:id', async(req,res)=>{
-    const id = req.params.postID;
-    try {
-      const post = await models.post.findOne({id})
-      await post.destroy()
-      return res.json({message:'post deleted'})
-    } 
-    catch (err) {
-      console.log(err)
-      return res.status(500).json({ error: 'Something went wrong' })
-    }
-  })
-
-///// for comment //// 
-    app.get('/user/post/comment/:id', async (req, res) => {
-    const id = req.params.post.commentID;
+    app.post('/user/post', async (req, res) => {
+      const { postID,userID,public_date , content , comment,react } = req.body
+      const id = req.params.id;
       try {
-        const comment = await models.comment.findAll({id})
-        return res.json(comment)
+          const Post = await post.create({ postID,userID,public_date,content, comment,react } )
+          return res.json(Post)
+    
+      }   catch (err) {
+          console.log(err)
+          return res.status(500).json(err)
+        }
+    })
+    app.put('/user/post', async(req,res)=>{
+      const {postID,userID,content} = req.body
+      const id = req.params.id
+  
+      try {
+        const Post = await post.findOne({where:{postID}})
+        Post.content= content
+        await Post.save()
+        return res.json(Post)
+      } 
+      catch (err) {
+        console.log(err)
+        return res.status(500).json({ error: 'Something went wrong' })
+      }
+    })
+  app.delete('/user/post', async(req,res)=>{
+    const id = req.params.id;
+    const {postID,userID} = req.body
+    try {
+      const Post = await post.findOne({id})
+      await Post.destroy()
+      return res.json({message:'Post Deleted'})
+    } 
+    catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Something went wrong' })
+    }
+  })
+
+// ///// for comment //// 
+    app.get('/user/post/comment', async (req, res) => {
+    const {postID,userID,commentID} = req.body
+    const id = req.params.id;
+      try {
+        const Comment = await comment.findAll({id})
+        return res.json(Comment)
         }
         catch (err) {
         console.log(err)
@@ -135,11 +149,11 @@ app.post('/user/post/:id', async (req, res) => {
         }
     })
 
-app.post('/post/comment/:id', async (req, res) => {
-    const {userID,commentID , name,content } = req.body
+app.post('/user/post/comment', async (req, res) => {
+    const {userID, postID , commentID , name,content } = req.body
     try {
-        const comment = await models.comment.create({userID,commentID ,name,content})
-      return res.json(comment)
+        const Comment = await comment.create({userID,postID,commentID ,name,content})
+      return res.json(Comment)
         } 
     catch (err) {
       console.log(err)
@@ -147,13 +161,14 @@ app.post('/post/comment/:id', async (req, res) => {
     }
 })
 
-  app.put('/user/post/comment/:id', async(req,res)=>{
+  app.put('/user/post/comment', async(req,res)=>{
     const {userID,postID,commentID,content} = req.body
+    const id = req.params.id;
     try {
-      const comment = await comment.findOne({commentID})
-      comment.content = content
-      await user.save()
-      return res.json(comment)
+      const Comment = await comment.findOne({id})
+      Comment.content = content
+      await Comment.save()
+      return res.json(Comment)
     } 
     catch (err) {
       console.log(err)
@@ -161,12 +176,13 @@ app.post('/post/comment/:id', async (req, res) => {
     }
   })
 
-  app.delete('/user/post/comment/:id', async(req,res)=>{
-    const id = req.params.commentID;
+  app.delete('/user/post/comment', async(req,res)=>{
+    const id = req.params.id;
+    const {userID,postID,commentID} = req.body
     try {
-      const comment = await models.comment.findOne({id})
-      await comment.destroy()
-      return res.json({message:'comment deleted'})
+      const Comment = await comment.findOne({id})
+      await Comment.destroy()
+      return res.json({message:'Comment deleted'})
     } 
     catch (err) {
       console.log(err)
@@ -174,12 +190,13 @@ app.post('/post/comment/:id', async (req, res) => {
     }
   })
 
-/// for react ////
-    app.get('/user/post/react/:id', async (req, res) => {
-    const id = req.params.react.postID;
+// /// for react ////
+    app.get('/user/post/react', async (req, res) => {
+    const id = req.params.id;
+    const {userID,postID,reactID} = req.body
       try {
-        const react = await react.findAll({id})
-        return res.json(react)
+        const React = await react.findAll({id})
+        return res.json(React)
       } 
       catch (err) {
         console.log(err)
@@ -187,12 +204,74 @@ app.post('/post/comment/:id', async (req, res) => {
       }
     })
 
-app.post('/post/react/:id', async (req, res) => {
-    const {userID,reactID ,type } = req.body
+  app.post('/user/post/react', async (req, res) => {
+    const {userID, postID , reactID , type } = req.body
+      try {
+        const React = await react.create({userID,postID,reactID ,type})
+        return res.json(React)
+          } 
+      catch (err) {
+        console.log(err)
+        return res.status(500).json(err)
+      }
+  })
+
+  app.put('/user/post/react', async(req,res)=>{
+    const {userID,postID,reactID,type} = req.body
+    const id = req.params.id;
     try {
-      const react = await models.react.findOne({reactID})
-      const react = await models.react.create({userID,reactID ,type})
-      return res.json(react)
+      const React = await react.findOne({id})
+      React.type = type
+      await React.save()
+      return res.json(React)
+    } 
+    catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Something went wrong' })
+    }
+  })
+
+  app.delete('/user/post/react', async(req,res)=>{
+    const id = req.params.id;
+    const {userID,postID,reactID} = req.body
+    const React = await react.findOne({ where: { userID, postID } })
+    try {
+      if (React){
+      await React.destroy()
+      return res.json({message:'React deleted'})
+      }
+      else{
+        
+        return res.json({message:'did not founded React'})
+      }
+    } 
+    catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Something went wrong' })
+    }
+  })
+
+ 
+
+/// for friend ////
+app.get('/user/friend', async (req, res) => {
+  const id = req.params.id;
+  const {user1,user2} = req.body
+    try {
+      const Friend = await friend.findOne({user1 , user2})
+      return res.json(Friend)
+    } 
+    catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Something went wrong' })
+    }
+  })
+
+app.post('/user/friend', async (req, res) => {
+  const {action, user1 , user2} = req.body
+    try {
+      const Friend = await friend.create({action,user1 ,user2})
+      return res.json(Friend)
         } 
     catch (err) {
       console.log(err)
@@ -200,13 +279,15 @@ app.post('/post/react/:id', async (req, res) => {
     }
 })
 
-  app.put('/user/post/react/:id', async(req,res)=>{
-    const {userID,postID,reactID,type} = req.body
+
+  app.put('/user/friend', async(req,res)=>{
+    const {action,user1,user2} = req.body
+    const id =req.params.id
     try {
-      const react = await models.react.findOne({reactID})
-      react.type = type
-      await user.save()
-      return res.json(react)
+      const Friend = await friend.findOne({where:{user1 , user2}})
+      Friend.action = action
+      await Friend.save()
+      return res.json(Friend)
     } 
     catch (err) {
       console.log(err)
@@ -214,65 +295,13 @@ app.post('/post/react/:id', async (req, res) => {
     }
   })
 
-  app.delete('/user/post/react/:id', async(req,res)=>{
-    const id = req.params.reactID;
-    try {
-      const react = await react.findOne({id})
-      await react.destroy()
-      return res.json({message:'react deleted'})
-    } 
-    catch (err) {
-      console.log(err)
-      return res.status(500).json({ error: 'Something went wrong' })
-    }
-  })
-
-/// for friend ////
-  app.get('/user/friend/:id', async (req, res) => {
-    const id = req.params.id;
-    try {
-      const friend = await models.friend.findAll({id})
-      return res.json(friend)
-    } 
-    catch (err) {
-      console.log(err)
-      return res.status(500).json({ error: 'Something went wrong' })
-    }
-  })
-
-app.post('/user/friend/:id', async (req, res) => {
-    const {userID, friendID,action } = req.body
-    try {
-      const friend = await friend.findOne({userID})
-      const friend = await models.friend.create({user1: userID, user2: friendID,action})
-      return res.json(friend)
-        } 
-    catch (err) {
-      console.log(err)
-      return res.status(500).json(err)
-    }
-  })
-
-  app.put('/user/friend/:id', async(req,res)=>{
-    const {userID,friendID,action} = req.body
-    try {
-      const friend = await models.friend.findOne({friendID})
-      friend.action = action
-      await user.save()
-      return res.json(friend)
-    } 
-    catch (err) {
-      console.log(err)
-      return res.status(500).json({ error: 'Something went wrong' })
-    }
-  })
-
-  app.delete('/user/friend/:id', async(req,res)=>{
+  app.delete('/user/friend', async(req,res)=>{
+    const {user1 , user2}= req.body
     const id = req.params.friendID;
     try {
-      const friend = await models.friend.findOne({id})
-      await friend.destroy()
-      return res.json({message:'friend deleted'})
+      const Friend = await friend.findOne({user1, user2})
+      await Friend.destroy()
+      return res.json({message:'Friend deleted'})
     } 
     catch (err) {
       console.log(err)
