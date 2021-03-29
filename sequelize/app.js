@@ -25,7 +25,7 @@ const jwt = require('jsonwebtoken');
  app.use(express.json());
 
  app.get('/user/login', async (req,res)=>{
-  const {userID} = req.body;
+  const {userID , email , password} = req.body;
   try {
     const User = await user.findOne({ where:  {userID}  })
     jwt.sign({User}, 'secretkey', (err,token)=>{
@@ -38,7 +38,7 @@ const jwt = require('jsonwebtoken');
       return res.status(500).json(err)
     }
  })
-
+// 
  app.post('/user/api/post',(req,res)=>{
    res.json({message:"post created...."});
  })
