@@ -1,10 +1,11 @@
 const express = require('express');
 const { sequelize, user, post , comment , react , friend} = require('./models')
 const { Sequelize } = require('sequelize');
-
+const jwt = require('jsonwebtoken');
  //register app
  const app = express();
 
+ 
  const PORT = process.env.PORT || 3000;
  app.listen(PORT, console.log('server started on port ',PORT));
   //connect to database nad start server
@@ -23,6 +24,25 @@ const { Sequelize } = require('sequelize');
      });
  app.use(express.json());
 
+ app.get('/user/login', async (req,res)=>{
+  const {userID} = req.body;
+  try {
+    const User = await user.findOne({ where:  {userID}  })
+    jwt.sign({User}, 'secretkey', (err,token)=>{
+        res.json({token})
+      });
+
+      }
+      catch (err) {
+      console.log(err)
+      return res.status(500).json(err)
+    }
+ })
+
+ app.post('/user/api/post',(req,res)=>{
+   res.json({message:"post created...."});
+ })
+
  /////// for user /////
  // create user
  app.post('/users', async (req, res) => {
@@ -37,17 +57,17 @@ const { Sequelize } = require('sequelize');
       return res.status(500).json(err)
     }
 })
-app.get('/user', async (req, res) => {
-  const {userID} = req.body;
-    try {
-      const User = await user.findOne({ where:  {userID}  })
-      return res.json(User)
-        } 
-      catch (err) {
-      console.log(err)
-      return res.status(500).json({ error: 'Something went wrong' })
-        }
-})
+// app.get('/user', async (req, res) => {
+//   const {userID} = req.body;
+//     try {
+//       const User = await user.findOne({ where:  {userID}  })
+//       return res.json(User)
+//         } 
+//       catch (err) {
+//       console.log(err)
+//       return res.status(500).json({ error: 'Something went wrong' })
+//         }
+// })
 
   app.put('/user', async(req,res)=>{
     const {userID,name,email,password} = req.body
@@ -241,7 +261,6 @@ app.post('/user/post/comment', async (req, res) => {
       return res.json({message:'React deleted'})
       }
       else{
-        
         return res.json({message:'did not founded React'})
       }
     } 
@@ -278,7 +297,6 @@ app.post('/user/friend', async (req, res) => {
       return res.status(500).json(err)
     }
 })
-
 
   app.put('/user/friend', async(req,res)=>{
     const {action,user1,user2} = req.body
