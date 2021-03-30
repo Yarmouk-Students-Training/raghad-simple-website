@@ -1,0 +1,42 @@
+{
+  "name": "raghad-simple-website",
+  "version": "1.0.0",
+  "description": "Hello \r First i download my file \r Then I create Branch \"New_Branch\" \r Then i was edit my file \r Finaly upload my file again",
+  "main": "files.js",
+  "directories": {
+    "doc": "doc"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yarmouk-Students-Training/raghad-simple-website.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Yarmouk-Students-Training/raghad-simple-website/issues"
+  },
+  "homepage": "https://github.com/Yarmouk-Students-Training/raghad-simple-website#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.21",
+    "mariadb": "^2.5.3",
+    "mongoose": "^5.12.0",
+    "morgan": "^1.10.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.2.5",
+    "pg": "^8.5.1",
+    "pg-hstore": "^2.3.3",
+    "postgres": "^1.0.2",
+    "sequelize": "^6.6.2",
+    "sequelize-cli": "^6.2.0",
+    "sqlite3": "^5.0.2",
+    "tedious": "^11.0.6"
+  }
+}
