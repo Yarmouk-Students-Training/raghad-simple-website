@@ -27,7 +27,7 @@ const jwt = require('jsonwebtoken');
  app.post('/user/signin', async (req,res)=>{
   const {userID , name, email , password} = req.body;
   try {
-    const User = await user.findOne({ where:  {userID}  })
+    const User = await user.create({ name, password, email } )
     jwt.sign({User}, 'secretkey', (err,token)=>{
         res.json({token})
       });
@@ -40,9 +40,9 @@ const jwt = require('jsonwebtoken');
  })
 // 
 app.get('/user/login', async (req,res)=>{
-  const {userID, email , password} = req.body;
+  const { email , password} = req.body;
   try {
-    const User = await user.findOne({ where:  {userID}  })
+    const User = await user.findOne({ where:  {email , password}  })
     jwt.sign({User}, 'secretkey', (err,token)=>{
         res.json({token})
       });
@@ -56,18 +56,18 @@ app.get('/user/login', async (req,res)=>{
 
  /////// for user /////
  // create user
- app.post('/users', async (req, res) => {
-  const { name , password , email } = req.body
-  const id = req.params.id
-  try {
-      const User = await user.create({ name, password, email } )
-      return res.json(User)
+//  app.post('/users', async (req, res) => {
+//   const { name , password , email } = req.body
+//   const id = req.params.id
+//   try {
+//       const User = await user.create({ name, password, email } )
+//       return res.json(User)
 
-  }   catch (err) {
-      console.log(err)
-      return res.status(500).json(err)
-    }
-})
+//   }   catch (err) {
+//       console.log(err)
+//       return res.status(500).json(err)
+//     }
+// })
 // app.get('/user', async (req, res) => {
 //   const {userID} = req.body;
 //     try {
@@ -337,3 +337,4 @@ app.post('/user/friend', async (req, res) => {
       return res.status(500).json({ error: 'Something went wrong' })
     }
   })
+  
