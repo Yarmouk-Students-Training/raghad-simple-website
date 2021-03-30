@@ -4,7 +4,7 @@ const { Sequelize } = require('sequelize');
 const jwt = require('jsonwebtoken');
  //register app
  const app = express();
-
+ require('dotenv').config()
  
  const PORT = process.env.PORT || 3000;
  app.listen(PORT, console.log('server started on port ',PORT));
@@ -24,7 +24,34 @@ const jwt = require('jsonwebtoken');
      });
  app.use(express.json());
 
- app.post('/user/signin', async (req,res)=>{
+ ////////
+//format of token //
+// autherization 
+// Verify Token
+function verifyToken (req,res,next){ 
+
+const authHeader = req.headers['authorization']
+// console.log(authHeader);
+ if (authHeader == null) {
+     next()
+ } else {
+
+     jwt.verify(authHeader,'secretkey',{expiresIn:'10s'}, (err, userid) => {
+         console.log(err)
+         // if (err) return res.sendStatus(401).json("please login")
+         req.userid = userid
+         
+         next()
+    
+     })
+ }
+ }
+
+// user login & signin
+ app.post('/user/signup', verifyToken,async (req,res)=>{
+   if ( req.userid) {
+     return res.json("you don't need to sign up user already exist")
+   }
   const {userID , name, email , password} = req.body;
   try {
     const User = await user.create({ name, password, email } )
@@ -39,11 +66,14 @@ const jwt = require('jsonwebtoken');
     }
  })
 // 
-app.get('/user/login', async (req,res)=>{
+app.get('/user/login',verifyToken, async (req,res)=>{
+  if ( req.userid) {
+    return res.json("you don't need to login user already login")
+  }
   const { email , password} = req.body;
   try {
     const User = await user.findOne({ where:  {email , password}  })
-    jwt.sign({User}, 'secretkey', (err,token)=>{
+    jwt.sign({User}, 'secretkey', {expiresIn:'30s'},(err,token)=>{
         res.json({token})
       });
 
@@ -54,31 +84,33 @@ app.get('/user/login', async (req,res)=>{
     }
  })
 
+ ///
+ 
  /////// for user /////
- // create user
-//  app.post('/users', async (req, res) => {
-//   const { name , password , email } = req.body
-//   const id = req.params.id
-//   try {
-//       const User = await user.create({ name, password, email } )
-//       return res.json(User)
+ //create user
+ app.post('/users', async (req, res) => {
+  const { name , password , email } = req.body
+  const id = req.params.id
+  try {
+      const User = await user.create({ name, password, email } )
+      return res.json(User)
 
-//   }   catch (err) {
-//       console.log(err)
-//       return res.status(500).json(err)
-//     }
-// })
-// app.get('/user', async (req, res) => {
-//   const {userID} = req.body;
-//     try {
-//       const User = await user.findOne({ where:  {userID}  })
-//       return res.json(User)
-//         } 
-//       catch (err) {
-//       console.log(err)
-//       return res.status(500).json({ error: 'Something went wrong' })
-//         }
-// })
+  }   catch (err) {
+      console.log(err)
+      return res.status(500).json(err)
+    }
+})
+app.get('/user', async (req, res) => {
+  const {userID} = req.body;
+    try {
+      const User = await user.findOne({ where:  {userID}  })
+      return res.json(User)
+        } 
+      catch (err) {
+      console.log(err)
+      return res.status(500).json({ error: 'Something went wrong' })
+        }
+})
 
   app.put('/user', async(req,res)=>{
     const {userID,name,email,password} = req.body
